@@ -1,19 +1,17 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/gin-gonic/gin"
+	"github.com/heshanthenura/lightlogger/internal/routes"
 )
 
 func main() {
 	r := gin.Default()
-
-	r.GET("/", func(c *gin.Context) {
-		c.String(200, "Light Logger is sd")
-	})
-
-	fmt.Print("Hello This is a change done by Dasun")
-
-	r.Run(":8080")
+	routes.RegisterRoutes(r)
+	log.Println("Light Logger starting on :8080")
+	if err := r.Run(":8080"); err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
 }
