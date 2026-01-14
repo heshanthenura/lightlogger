@@ -5,3 +5,4 @@ tmp_dir = "tmp"
 pre_cmd = ["echo 'test build'"]
 cmd = "go build -buildvcs=false -o ./bin/lightlogger ./cmd/lightlogger"
 bin = "./bin/lightlogger"
+exclude_dir = ["frontend", "tmp"]

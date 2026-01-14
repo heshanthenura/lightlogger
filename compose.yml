@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: lightlogger
+    container_name: lightlogger-backend
     working_dir: /app
     volumes:
       - .:/app
@@ -11,7 +11,27 @@ services:
       - go_build_cache:/root/.cache/go-build
     ports:
       - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: lightlogger
+      DB_PASSWORD: lightlogger
+      DB_NAME: lightlogger
+
+  db:
+    image: postgres:15
+    container_name: lightlogger-db
+    restart: always
+    environment:
+      POSTGRES_USER: lightlogger
+      POSTGRES_PASSWORD: lightlogger
+      POSTGRES_DB: lightlogger
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
 volumes:
   go_mod_cache:
   go_build_cache:
+  pgdata:

@@ -5,5 +5,7 @@ import (
 )
 
 func RegisterRoutes(r *gin.Engine) {
-	RegisterIndexRoutes(r)
+	apiGrp := r.Group("/api/v1")
+	RegisterIndexRoutes(apiGrp)
+	RegisterServiceRoutes(apiGrp)
 }

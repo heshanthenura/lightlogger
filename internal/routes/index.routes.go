@@ -5,6 +5,6 @@ import (
 	"github.com/heshanthenura/lightlogger/internal/handlers"
 )
 
-func RegisterIndexRoutes(r *gin.Engine) {
+func RegisterIndexRoutes(r *gin.RouterGroup) {
 	r.GET("/", handlers.IndexHandler)
 }
