@@ -5,12 +5,28 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/heshanthenura/lightlogger/internal/db"
 	"github.com/heshanthenura/lightlogger/internal/helpers"
 	"github.com/heshanthenura/lightlogger/internal/types"
 )
 
+func GetAllServicesHandler(c *gin.Context) {
+	services, err := db.GetAllServices()
+	if err != nil {
+		log.Println("Failed to fetch services:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to fetch services",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"services": services,
+	})
+}
+
 func AddNewServiceHandler(c *gin.Context) {
-	req, err := helpers.BindJSON[types.AddNewServiceType](c)
+	req, err := helpers.BindJSON[types.ServiceType](c)
 	if err != nil {
 		log.Println("Failed to parse request payload:", err)
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -49,8 +65,15 @@ func AddNewServiceHandler(c *gin.Context) {
 		return
 	}
 
-	log.Printf("Received new service: %+v\n", req)
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Service added successfully",
-	})
+	if db.AddNewService(&req) {
+		log.Printf("Received new service: %+v\n", req)
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Service added successfully",
+		})
+	} else {
+		log.Println("Failed to add new service")
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to add service",
+		})
+	}
 }

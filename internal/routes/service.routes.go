@@ -9,4 +9,5 @@ func RegisterServiceRoutes(r *gin.RouterGroup) {
 	serviceGroup := r.Group("/service")
 
 	serviceGroup.POST("/new", handlers.AddNewServiceHandler)
+	serviceGroup.GET("/all", handlers.GetAllServicesHandler)
 }

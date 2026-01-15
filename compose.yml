@@ -30,6 +30,7 @@ services:
       POSTGRES_DB: lightlogger
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
 
 volumes:
   go_mod_cache:
