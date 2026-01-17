@@ -9,4 +9,5 @@ func RegisterRoutes(r *gin.Engine) {
 	RegisterIndexRoutes(apiGrp)
 	RegisterServiceRoutes(apiGrp)
 	RegisterLogRoutes(apiGrp)
+	RegisterUserRoutes(apiGrp)
 }

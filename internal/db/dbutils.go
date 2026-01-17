@@ -87,3 +87,29 @@ func AddNewLog(logData *types.LogType) bool {
 
 	return true
 }
+
+func GetUserByUsername(username string) (*types.UserType, error) {
+	var user types.UserType
+
+	err := Pool.QueryRow(context.Background(), `
+        SELECT id, username, password_hash
+        FROM users
+        WHERE username = $1
+    `, username).Scan(&user.ID, &user.Username, &user.PasswordHash)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func UpdateUserPassword(userID int, newPasswordHash string) error {
+	_, err := Pool.Exec(context.Background(), `
+        UPDATE users
+        SET password_hash = $1
+        WHERE id = $2
+    `, newPasswordHash, userID)
+
+	return err
+}

@@ -19,6 +19,7 @@ services:
       DB_USER: lightlogger
       DB_PASSWORD: lightlogger
       DB_NAME: lightlogger
+      JWT_SECRET: your-secret-key-change-in-production
 
   db:
     image: postgres:15
