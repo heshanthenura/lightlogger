@@ -1,4 +1,19 @@
 services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: dev
+    container_name: lightlogger-frontend
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
   backend:
     build:
       context: .
@@ -20,6 +35,7 @@ services:
       DB_PASSWORD: lightlogger
       DB_NAME: lightlogger
       JWT_SECRET: your-secret-key-change-in-production
+    restart: unless-stopped
 
   db:
     image: postgres:15
