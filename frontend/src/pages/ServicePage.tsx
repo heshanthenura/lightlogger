@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 
 function ServicePage() {
-  return <div>ServicePage</div>;
+  return (
+    <>
+      <div className="bg-red-600">asd</div>
+    </>
+  );
 }
 
 export default ServicePage;
