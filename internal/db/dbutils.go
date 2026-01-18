@@ -88,6 +88,51 @@ func AddNewLog(logData *types.LogType) bool {
 	return true
 }
 
+func GetLogs(page int, limit int) ([]types.LogType, error) {
+	offset := (page - 1) * limit
+	log.Printf("GetLogs | page=%d limit=%d offset=%d", page, limit, offset)
+
+	var logs []types.LogType
+
+	rows, err := Pool.Query(context.Background(), `
+        SELECT log_id,service_id, level, message, metadata, created_at
+        FROM logs
+        ORDER BY created_at DESC
+        LIMIT $1 OFFSET $2
+    `, limit, offset)
+	if err != nil {
+		log.Println("GetLogs | query error:", err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var l types.LogType
+		var metadata []byte
+
+		if err := rows.Scan(
+			&l.LogID,
+			&l.ServiceID,
+			&l.Level,
+			&l.Message,
+			&metadata,
+			&l.CreatedAt,
+		); err != nil {
+			log.Println("GetLogs | scan error:", err)
+			return nil, err
+		}
+
+		l.Metadata = nil
+		logs = append(logs, l)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return logs, nil
+}
+
 func GetUserByUsername(username string) (*types.UserType, error) {
 	var user types.UserType
 

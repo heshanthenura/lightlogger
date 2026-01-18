@@ -17,7 +17,7 @@ function LogPage() {
   };
   return (
     <div>
-      <div className="bg-white rounded-lg border border-gray-200 p-4">
+      {/* <div className="bg-white rounded-lg border border-gray-200 p-4">
         <div className="flex items-center gap-4">
           <div className="flex-1 relative">
             <Search
@@ -56,28 +56,7 @@ function LogPage() {
             Filters
           </button>
         </div>
-
-        {/* {selectedLevels.size > 0 && (
-          <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-200">
-            <span className="text-gray-600">Active filters:</span>
-            {Array.from(selectedLevels).map((level) => (
-              <span
-                key={level}
-                className={`${logLevelConfig[level].bg} ${logLevelConfig[level].color} px-3 py-1 rounded-full capitalize cursor-pointer hover:opacity-75`}
-                onClick={() => toggleLevel(level)}
-              >
-                {level} ×
-              </span>
-            ))}
-            <button
-              onClick={() => setSelectedLevels(new Set())}
-              className="text-blue-600 hover:text-blue-700 ml-2"
-            >
-              Clear all
-            </button>
-          </div>
-        )} */}
-      </div>
+      </div> */}
 
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">

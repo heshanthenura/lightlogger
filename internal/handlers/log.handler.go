@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"log"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -46,4 +47,20 @@ func AddNewLogHandler(c *gin.Context) {
 	)
 
 	c.JSON(201, gin.H{"message": "Log created successfully"})
+}
+
+func GetLogsHandler(c *gin.Context) {
+	pageStr := c.DefaultQuery("page", "1")
+	limitStr := c.DefaultQuery("limit", "100")
+
+	page, err := strconv.Atoi(pageStr)
+	limit, err := strconv.Atoi(limitStr)
+
+	logs, err := db.GetLogs(page, limit)
+	if err != nil {
+		c.JSON(500, gin.H{"error": "failed to fetch logs"})
+		return
+	}
+
+	c.JSON(200, gin.H{"logs": logs, "page": page, "limit": limit})
 }

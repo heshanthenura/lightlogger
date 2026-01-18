@@ -8,4 +8,5 @@ import (
 func RegisterLogRoutes(r *gin.RouterGroup) {
 	serviceGroup := r.Group("/log")
 	serviceGroup.GET("/add/:service_id", handlers.AddNewLogHandler)
+	serviceGroup.GET("/get", handlers.GetLogsHandler)
 }
