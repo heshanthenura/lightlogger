@@ -1,9 +1,7 @@
 import {
   AlertCircle,
   AlertTriangle,
-  CheckCircle,
   Filter,
-  Icon,
   Info,
   Radio,
   RefreshCw,
@@ -64,9 +62,9 @@ function LogPage() {
   const handleRefresh = () => {
     setIsRefreshing(true);
 
-    setTimeout(() => {
+    getLogs(1, 50).then(() => {
       setIsRefreshing(false);
-    }, 500);
+    });
   };
 
   const getLogs = async (page: number, limit: number) => {
@@ -144,14 +142,6 @@ function LogPage() {
 
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
-          <div className="px-4 py-3 border-t border-gray-200 bg-gray-50 flex items-center justify-between">
-            {isLive && (
-              <div className="flex items-center gap-2 text-sm text-green-600">
-                <div className="h-2 w-2 rounded-full bg-green-600 animate-pulse" />
-                Live updates active
-              </div>
-            )}
-          </div>
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
