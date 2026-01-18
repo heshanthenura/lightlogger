@@ -24,6 +24,14 @@ func main() {
 		MaxAge:           12 * time.Hour,
 	}))
 	routes.RegisterRoutes(r)
+
+	r.Static("/assets", "./frontend/dist/assets")
+	r.StaticFile("/vite.svg", "./frontend/dist/vite.svg")
+
+	r.NoRoute(func(c *gin.Context) {
+		c.File("./frontend/dist/index.html")
+	})
+
 	log.Println("Light Logger starting on :8080")
 	if err := r.Run(":8080"); err != nil {
 		log.Fatalf("Failed to start server: %v", err)

@@ -114,8 +114,11 @@ function ServicePage() {
         <h3 className="text-gray-900 mb-4">Add New Service</h3>
         <div className="space-y-4">
           <div>
-            <label className="text-gray-600 block mb-2">Service Name</label>
+            <label htmlFor="service-name" className="text-gray-600 block mb-2">
+              Service Name
+            </label>
             <input
+              id="service-name"
               type="text"
               placeholder="e.g., api.gateway"
               value={newService.service_name}
@@ -126,8 +129,14 @@ function ServicePage() {
             />
           </div>
           <div>
-            <label className="text-gray-600 block mb-2">Description</label>
+            <label
+              htmlFor="service-description"
+              className="text-gray-600 block mb-2"
+            >
+              Description
+            </label>
             <textarea
+              id="service-description"
               placeholder="Brief description of what this service does..."
               value={newService.service_description}
               onChange={(e) =>
@@ -150,7 +159,7 @@ function ServicePage() {
         </button>
       </div>
 
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden mt-[10px]">
+      <div className="bg-white rounded-lg border border-gray-200 mt-[10px]">
         <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
           <h3 className="text-gray-900">Active Services ({services.length})</h3>
         </div>
@@ -180,7 +189,10 @@ function ServicePage() {
                       </p>
                       <div className="flex items-center gap-2">
                         <span className="text-xs text-gray-500">URL:</span>
-                        <code>/api/v1/log/add/{service.service_id}</code>
+                        <code>
+                          {globalThis.location.origin}/api/v1/log/add/
+                          {service.service_id}
+                        </code>
                       </div>
                     </div>
                     <button

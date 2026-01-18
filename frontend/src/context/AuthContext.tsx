@@ -2,11 +2,9 @@ import React, {
   createContext,
   useContext,
   useState,
-  useEffect,
   type ReactNode,
 } from "react";
 import type { AuthContextType, User } from "./AuthTypes";
-import LoadingPage from "../pages/LoadingPage";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -16,7 +14,6 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
 
   const API_URL = import.meta.env.VITE_API_URL;
 

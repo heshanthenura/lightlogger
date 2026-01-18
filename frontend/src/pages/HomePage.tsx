@@ -1,9 +1,10 @@
 import { LogOut } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import ServicePage from "./ServicePage";
+import LogPage from "./LogPage";
 
 function HomePage() {
-  var [tab, setTab] = useState("services");
+  let [tab, setTab] = useState("logs");
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -55,7 +56,7 @@ function HomePage() {
           </div>
         </div>
 
-        {tab === "logs" ? <>sadas</> : <ServicePage />}
+        {tab === "logs" ? <LogPage /> : <ServicePage />}
       </div>
     </div>
   );
