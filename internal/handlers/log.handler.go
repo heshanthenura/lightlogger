@@ -56,11 +56,11 @@ func GetLogsHandler(c *gin.Context) {
 	page, err := strconv.Atoi(pageStr)
 	limit, err := strconv.Atoi(limitStr)
 
-	logs, err := db.GetLogs(page, limit)
+	logs, totalPages, err := db.GetLogs(page, limit)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "failed to fetch logs"})
 		return
 	}
 
-	c.JSON(200, gin.H{"logs": logs, "page": page, "limit": limit})
+	c.JSON(200, gin.H{"logs": logs, "page": page, "limit": limit, "totalPages": totalPages})
 }

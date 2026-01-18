@@ -1,10 +1,63 @@
-import { Filter, Radio, RefreshCw, Search } from "lucide-react";
-import { useState } from "react";
+import {
+  AlertCircle,
+  AlertTriangle,
+  CheckCircle,
+  Filter,
+  Icon,
+  Info,
+  Radio,
+  RefreshCw,
+  Search,
+  XCircle,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+
+type Log = {
+  log_id: string;
+  service_id: string;
+  level: string;
+  message: string;
+  metadata: string | null;
+  created_at: string;
+};
 
 function LogPage() {
   let [isLive, setIsLive] = useState(false);
   let [isRefreshing, setIsRefreshing] = useState(false);
 
+  let [logs, setLogs] = useState<Log[]>([]);
+  const logLevelConfig = {
+    debug: {
+      icon: AlertCircle,
+      color: "text-gray-600",
+      bg: "bg-gray-50",
+      border: "border-gray-200",
+    },
+    info: {
+      icon: Info,
+      color: "text-blue-600",
+      bg: "bg-blue-50",
+      border: "border-blue-200",
+    },
+    warn: {
+      icon: AlertTriangle,
+      color: "text-yellow-600",
+      bg: "bg-yellow-50",
+      border: "border-yellow-200",
+    },
+    error: {
+      icon: XCircle,
+      color: "text-red-600",
+      bg: "bg-red-50",
+      border: "border-red-200",
+    },
+    fatal: {
+      icon: XCircle,
+      color: "text-red-900",
+      bg: "bg-red-100",
+      border: "border-red-300",
+    },
+  };
   const toggleLive = () => {
     setIsLive(!isLive);
   };
@@ -15,9 +68,22 @@ function LogPage() {
       setIsRefreshing(false);
     }, 500);
   };
+
+  const getLogs = async (page: number, limit: number) => {
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/log/get?page=${page}&limit=${limit}`,
+    );
+    const data = await res.json();
+    setLogs(data.logs);
+  };
+
+  useEffect(() => {
+    getLogs(1, 100);
+  }, []);
+
   return (
     <div>
-      {/* <div className="bg-white rounded-lg border border-gray-200 p-4">
+      <div className="bg-white rounded-lg border border-gray-200 p-4">
         <div className="flex items-center gap-4">
           <div className="flex-1 relative">
             <Search
@@ -56,7 +122,7 @@ function LogPage() {
             Filters
           </button>
         </div>
-      </div> */}
+      </div>
 
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
@@ -70,17 +136,53 @@ function LogPage() {
                   Timestamp
                 </th>
                 <th className="text-left px-4 py-2 text-gray-600 text-sm">
-                  Source
+                  Service
                 </th>
                 <th className="text-left px-4 py-2 text-gray-600 text-sm">
                   Message
                 </th>
-                <th className="text-left px-4 py-2 text-gray-600 text-sm">
-                  Details
-                </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200"></tbody>
+            <tbody className="divide-y divide-gray-200">
+              {logs.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={5}
+                    className="px-4 py-8 text-center text-gray-500"
+                  >
+                    No logs found
+                  </td>
+                </tr>
+              ) : (
+                logs.map((log) => {
+                  const config =
+                    logLevelConfig[log.level as keyof typeof logLevelConfig];
+                  const Icon = config?.icon || Info;
+                  return (
+                    <tr
+                      key={log.log_id}
+                      className="hover:bg-gray-50 cursor-pointer transition-colors"
+                    >
+                      <td className="px-4 py-2">
+                        <div
+                          className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full ${config.bg} ${config.color} text-xs`}
+                        >
+                          <Icon size={12} />
+                          <span className="capitalize">{log.level}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-2 text-sm">{log.created_at}</td>
+                      <td className="px-4 py-2 text-sm text-gray-900">
+                        {log.service_id}
+                      </td>
+                      <td className="px-4 py-2 text-sm text-gray-600 max-w-xs truncate">
+                        {log.message}
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
           </table>
         </div>
 
