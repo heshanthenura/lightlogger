@@ -18,7 +18,7 @@ type Log = {
   level: string;
   message: string;
   metadata: string | null;
-  created_at: string;
+  created_at: Date;
 };
 
 function LogPage() {
@@ -77,6 +77,24 @@ function LogPage() {
     setLogs(data.logs);
   };
 
+  const formatTime = (dateStr: string | Date) => {
+    const date = typeof dateStr === "string" ? new Date(dateStr) : dateStr;
+    return date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+  };
+
+  const formatDate = (dateStr: string | Date) => {
+    const date = typeof dateStr === "string" ? new Date(dateStr) : dateStr;
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
+
   useEffect(() => {
     getLogs(1, 100);
   }, []);
@@ -126,6 +144,14 @@ function LogPage() {
 
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
+          <div className="px-4 py-3 border-t border-gray-200 bg-gray-50 flex items-center justify-between">
+            {isLive && (
+              <div className="flex items-center gap-2 text-sm text-green-600">
+                <div className="h-2 w-2 rounded-full bg-green-600 animate-pulse" />
+                Live updates active
+              </div>
+            )}
+          </div>
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
@@ -171,7 +197,14 @@ function LogPage() {
                           <span className="capitalize">{log.level}</span>
                         </div>
                       </td>
-                      <td className="px-4 py-2 text-sm">{log.created_at}</td>
+                      <td className="px-4 py-2 text-sm">
+                        <div className="text-gray-900">
+                          {formatTime(log.created_at)}
+                        </div>
+                        <div className="text-gray-500 text-xs">
+                          {formatDate(log.created_at)}
+                        </div>
+                      </td>
                       <td className="px-4 py-2 text-sm text-gray-900">
                         {log.service_id}
                       </td>
@@ -184,15 +217,6 @@ function LogPage() {
               )}
             </tbody>
           </table>
-        </div>
-
-        <div className="px-4 py-3 border-t border-gray-200 bg-gray-50 flex items-center justify-between">
-          {isLive && (
-            <div className="flex items-center gap-2 text-sm text-green-600">
-              <div className="h-2 w-2 rounded-full bg-green-600 animate-pulse" />
-              Live updates active
-            </div>
-          )}
         </div>
       </div>
     </div>
