@@ -1,8 +1,35 @@
 # LightLogger
 
+<img src="./screenshot/main.png">
+
 LightLogger is a lightweight log collection and monitoring platform built for startups, small teams, and internal systems that want visibility into logs without complex or expensive tools.
 
 It focuses on simplicity, clarity, and low overhead.
+
+# Table of Contents
+
+- [Usage Warning](#usage-warning)
+- [Why LightLogger](#why-lightLogger)
+- [Current Features](#current-features)
+- [What LightLogger Does NOT Do (Yet)](#what-lightlogger-does-not-do-yet)
+- [Tech Stack](#tech-stack)
+- [Architecture Overview](#architecture-overview)
+- [Example Use Cases](#example-use-cases)
+- [Who Is It For](#who-is-it-for)
+- [Getting Started](#getting-started)
+- [Customization](#customization)
+
+## Usage Warning
+
+⚠️ **Important Notice:**
+
+This setup is **not ready for public deployment**. It is intended **only for internal company logging and testing purposes**.
+
+- Do **not** expose this service to the internet without proper security measures.
+- Default credentials and settings are insecure for production.
+- Use strong secrets and restrict access if deploying internally.
+
+Always treat the dashboard and logs as sensitive internal data.
 
 ## Why LightLogger
 
@@ -31,13 +58,6 @@ LightLogger keeps things simple and easy to run.
 ### Log Viewing
 
 - Real time style log viewing via polling
-- Filter by:
-
-  - Service
-  - Log level
-  - Time range
-
-- Search logs by text
 
 ### Dashboard
 
@@ -51,8 +71,7 @@ LightLogger keeps things simple and easy to run.
 - No anomaly detection
 - No automatic security response
 - No distributed tracing
-
-This is intentional to keep the system lightweight.
+- Log filtering
 
 ## Tech Stack
 
@@ -103,30 +122,93 @@ This is intentional to keep the system lightweight.
 - Docker
 - Docker Compose
 
-### Run Locally
+### Configuration
+
+Before running the server, update the default environment values in the `compose.yml` file to suit your setup. This ensures security and proper database connection.
+
+**Backend service environment variables:**
+
+```yaml
+environment:
+  DB_HOST: db
+  DB_PORT: 5432
+  DB_USER: lightlogger # Change to your database username
+  DB_PASSWORD: lightlogger # Change to your database password
+  DB_NAME: lightlogger # Change to your database name
+  JWT_SECRET: your-secret-key-change-in-production # Change to a strong secret
+```
+
+**PostgreSQL service environment variables:**
+
+```yaml
+environment:
+  POSTGRES_USER: lightlogger # Change to match backend DB_USER
+  POSTGRES_PASSWORD: lightlogger # Change to match backend DB_PASSWORD
+  POSTGRES_DB: lightlogger # Change to match backend DB_NAME
+```
+
+> Make sure these values are consistent between the backend and database services. Never use default secrets in production.
+
+### Running
+
+Clone the repository and start the services using Docker Compose:
 
 ```bash
-git clone https://github.com/your-org/lightlogger
+git clone https://github.com/heshanthenura/lightlogger
 cd lightlogger
 docker-compose up -d
 ```
 
-## Roadmap
+- Dashboard will be accessible at `http://<<host_ip>>:8080`
 
-- Basic alerting rules
-- Webhook based notifications
-- Role based access control
-- Log retention policies
-- Saved searches
+  > If you want to use a different port, update the `ports` mapping for the backend service in the `docker-compose.yml` file. For example:
 
-## Philosophy
+  ```yaml
+  ports:
+    - "9090:8080" # Maps container port 8080 to host port 9090
+  ```
 
-LightLogger is built to be:
+To stop the services:
 
-- Simple
-- Honest
-- Affordable
-- Easy to self host
+```bash
+docker-compose down
+```
 
-No unnecessary features.
-No false promises.
+### Usage
+
+1. Access the dashboard at `http://<<host_ip>>:8080` and log in using the default credentials:
+
+   ```
+   Username: admin
+   Password: admin
+   ```
+
+2. Add a new service in the dashboard.
+
+<img src="./screenshot/1.png">
+
+3. After adding, note the **service ID** and its corresponding **URL**.
+   <img src="./screenshot/2.png">
+4. Send an HTTP `POST` request to the service URL with a JSON body like this:
+
+```json
+{
+  "level": "warn",
+  "message": "Query execution time exceeded threshold - 2500ms"
+}
+```
+
+- Supported log levels:
+
+  ```
+  debug, info, warn, error, fatal
+  ```
+
+5. The logs will appear in the dashboard under the corresponding service.
+   <img src="./screenshot/3.png">
+
+## Customization
+
+This setup can be customized according to your company’s requirements. If you want additional features, integrations, or workflow changes, reach out to me.
+
+customization can be done for an affordable cost to suit your internal logging needs.
