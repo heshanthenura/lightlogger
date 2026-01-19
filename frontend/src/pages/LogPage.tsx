@@ -94,6 +94,15 @@ function LogPage() {
   };
 
   useEffect(() => {
+    if (isLive) {
+      const interval = setInterval(() => {
+        getLogs(1, 100);
+      }, 2000);
+      return () => clearInterval(interval);
+    }
+  }, [isLive]);
+
+  useEffect(() => {
     getLogs(1, 100);
   }, []);
 
@@ -160,7 +169,7 @@ function LogPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {logs.length === 0 ? (
+              {!logs || logs.length === 0 ? (
                 <tr>
                   <td
                     colSpan={5}

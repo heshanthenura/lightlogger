@@ -161,11 +161,13 @@ function ServicePage() {
 
       <div className="bg-white rounded-lg border border-gray-200 mt-[10px]">
         <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
-          <h3 className="text-gray-900">Active Services ({services.length})</h3>
+          <h3 className="text-gray-900">
+            Active Services ({services ? services.length : 0})
+          </h3>
         </div>
 
         <div className="p-6">
-          {services.length === 0 ? (
+          {!services || services.length === 0 ? (
             <div className="text-center py-12 text-gray-500">
               No services added yet
             </div>
@@ -180,7 +182,7 @@ function ServicePage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-2">
                         <code className="text-gray-700 bg-gray-100 px-2 py-1 rounded">
-                          {service.service_description}
+                          {service.service_name}
                         </code>
                       </div>
                       <p className="text-sm text-gray-600 mb-3">

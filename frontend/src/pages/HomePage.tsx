@@ -6,6 +6,11 @@ import LogPage from "./LogPage";
 function HomePage() {
   let [tab, setTab] = useState("logs");
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    globalThis.location.href = "/login";
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-200">
@@ -22,7 +27,10 @@ function HomePage() {
                 <p className="text-gray-600">Welcome back,</p>
                 <p className="text-gray-900">Admin</p>
               </div>
-              <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+              <button
+                className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                onClick={handleLogout}
+              >
                 <LogOut size={20} />
                 Logout
               </button>
